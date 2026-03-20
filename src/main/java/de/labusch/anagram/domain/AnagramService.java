@@ -1,11 +1,14 @@
 package de.labusch.anagram.domain;
 
+import org.jspecify.annotations.NonNull;
+
 import java.util.Set;
 
 import static java.util.stream.Collectors.toUnmodifiableSet;
 
 /**
  * @since 19.03.2026.
+ * @author Fin Labusch
  */
 public class AnagramService {
 
@@ -16,7 +19,7 @@ public class AnagramService {
         this.repository = repository;
     }
 
-    public Set<String> addAnagram(String text) {
+    public Set<String> addAnagram(@NonNull String text) {
         String anyAnagram = repository.anyAnagram()
                 .orElse(text);
         if (anagram.isAnagram(anyAnagram, text)) {
@@ -26,7 +29,7 @@ public class AnagramService {
         return repository.allAnagrams();
     }
 
-    public Set<String> findAnagrams(String text) {
+    public Set<String> findAnagrams(@NonNull String text) {
         Set<String> anagrams = repository.allAnagrams();
         return anagrams.stream()
                 .filter(a -> anagram.isAnagram(text, a))

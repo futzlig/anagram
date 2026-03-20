@@ -16,6 +16,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
  * Unit-Test zur Klasse @{link Anagram}.
  *
  * @since 19.03.2026.
+ * @author Fin Labusch
  */
 class AnagramTest {
 
@@ -32,6 +33,7 @@ class AnagramTest {
         return Stream.of(
                 arguments("foo", "foo"),
                 arguments("Heart", "Earth"),
+                arguments("Opa mag Anna.", "Anna mag Opa."),
                 arguments("Eleven plus two", "Twelve plus one")
         );
     }

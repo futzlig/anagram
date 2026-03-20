@@ -2,6 +2,8 @@ package de.labusch.anagram.infrastructure.persistence;
 
 import de.labusch.anagram.domain.AnagramRepository;
 
+import org.jspecify.annotations.NonNull;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -10,6 +12,7 @@ import java.util.Set;
 
 /**
  * @since 19.03.2026.
+ * @author Fin Labusch
  */
 public class InMemoryAnagramRepository implements AnagramRepository {
 
@@ -26,7 +29,7 @@ public class InMemoryAnagramRepository implements AnagramRepository {
     }
 
     @Override
-    public void add(String anagram) {
+    public void add(@NonNull String anagram) {
         Objects.requireNonNull(anagram);
         anagrams.add(anagram);
     }

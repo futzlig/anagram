@@ -20,3 +20,8 @@ Have fun.
 ## Contact
 Written by [Fin Labusch](mailto:info@futzl.de).
 
+P.S.
+If you're missing comments in the source code - that's intended. 
+In my experience, comments are not changed when code is changed. 
+The given code should be self-explantory, otherwise it's not clean
+code or just too much in a single method.

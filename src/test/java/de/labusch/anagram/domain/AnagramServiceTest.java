@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
  * Unit-Test zur Klasse @{link AnagramServiceTest}.
  *
  * @since 20.03.2026.
+ * @author Fin Labusch
  */
 @ExtendWith(MockitoExtension.class)
 class AnagramServiceTest {

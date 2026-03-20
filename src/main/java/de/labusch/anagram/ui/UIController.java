@@ -9,6 +9,7 @@ import static java.util.stream.Collectors.joining;
 
 /**
  * @since 20.03.2026.
+ * @author Fin Labusch
  */
 public class UIController {
 
