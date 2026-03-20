@@ -26,19 +26,26 @@ public class Anagram {
         Objects.requireNonNull(a1);
         Objects.requireNonNull(a2);
 
-        a1 = a1.trim().toLowerCase();
-        a2 = a2.trim().toLowerCase();
+        a1 = prepareText(a1);
+        a2 = prepareText(a2);
         if (a1.equals(a2)) {
             return true;
         }
 
-        Map<Integer, List<Integer>> letters1 = a1.codePoints()
-                .boxed()
-                .collect(groupingBy(identity()));
-        Map<Integer, List<Integer>> letters2 = a2.codePoints()
-                .boxed()
-                .collect(groupingBy(identity()));
+        Map<Integer, List<Integer>> letters1 = groupByLetters(a1);
+        Map<Integer, List<Integer>> letters2 = groupByLetters(a2);
 
         return letters1.equals(letters2);
     }
+
+    private String prepareText(String s) {
+        return s.toLowerCase().replaceAll("[^a-zäöüß0-9]", "");
+    }
+
+    private static Map<Integer, List<Integer>> groupByLetters(String a2) {
+        return a2.codePoints()
+                .boxed()
+                .collect(groupingBy(identity()));
+    }
+
 }

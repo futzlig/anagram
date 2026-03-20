@@ -34,7 +34,9 @@ class AnagramTest {
                 arguments("foo", "foo"),
                 arguments("Heart", "Earth"),
                 arguments("Opa mag Anna.", "Anna mag Opa."),
-                arguments("Eleven plus two", "Twelve plus one")
+                arguments("Eleven plus two", "Twelve plus one"),
+                arguments("William Shakespeare", "I'll make a wise phrase."),
+                arguments("Träume", "räumte")
         );
     }
 
@@ -48,7 +50,8 @@ class AnagramTest {
     private static Stream<Arguments> shouldTestAnagramsNegative() {
         return Stream.of(
                 arguments("foo", "bar"),
-                arguments("Nee", "Neee")
+                arguments("Nee", "Neee"),
+                arguments("Träume", "rüumte")
         );
     }
 

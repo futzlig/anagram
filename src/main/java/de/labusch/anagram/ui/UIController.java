@@ -51,7 +51,7 @@ public class UIController {
     private Choice mainMenu() {
         console.printf("Main Menu: 1 = Enter anagrams  2 = Test anagram  Q: Quit\n");
         console.printf("Your choice: ");
-        String choice = System.console().readLine();
+        String choice = console.readLine();
         return switch (choice) {
             case "1" -> Choice.ENTER;
             case "2" -> Choice.TEST;
