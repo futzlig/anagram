@@ -2,38 +2,42 @@ package de.labusch.anagram.domain;
 
 import org.jspecify.annotations.NonNull;
 
-import java.util.Set;
-
-import static java.util.stream.Collectors.toUnmodifiableSet;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
- * @since 19.03.2026.
  * @author Fin Labusch
+ * @since 19.03.2026.
  */
 public class AnagramService {
 
     private final AnagramRepository repository;
-    private final Anagram anagram = new Anagram();
 
     public AnagramService(AnagramRepository repository) {
         this.repository = repository;
     }
 
-    public Set<String> addAnagram(@NonNull String text) {
-        String anyAnagram = repository.anyAnagram()
-                .orElse(text);
-        if (anagram.isAnagram(anyAnagram, text)) {
-            repository.add(text);
-        }
+    public boolean areAnagrams(@NonNull String text1, @NonNull String text2) {
+        Objects.requireNonNull(text1);
+        Objects.requireNonNull(text2);
 
-        return repository.allAnagrams();
+        return Anagram.valueOf(text1).isAnagram(text2);
     }
 
-    public Set<String> findAnagrams(@NonNull String text) {
-        Set<String> anagrams = repository.allAnagrams();
-        return anagrams.stream()
-                .filter(a -> anagram.isAnagram(text, a))
-                .collect(toUnmodifiableSet());
+    public Anagram addAnagrams(@NonNull String text1, @NonNull String text2) {
+        Objects.requireNonNull(text1);
+        Objects.requireNonNull(text2);
+
+        Anagram anagram = repository.findAnagram(text1)
+                .orElseGet(() -> repository.add(Anagram.valueOf(text1)));
+        anagram.addAnagram(text2);
+        return anagram;
+    }
+
+    public Optional<Anagram> findAnagrams(@NonNull String text) {
+        Objects.requireNonNull(text);
+
+        return repository.findAnagram(text);
     }
 
 }

@@ -1,37 +1,45 @@
 package de.labusch.anagram.infrastructure.persistence;
 
+import de.labusch.anagram.domain.Anagram;
 import de.labusch.anagram.domain.AnagramRepository;
 
 import org.jspecify.annotations.NonNull;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import static java.util.Collections.unmodifiableSet;
+
 /**
- * @since 19.03.2026.
  * @author Fin Labusch
+ * @since 19.03.2026.
  */
 public class InMemoryAnagramRepository implements AnagramRepository {
 
-    private final Set<String> anagrams = new HashSet<>();
+    private final Set<Anagram> anagrams = new HashSet<>();
 
     @Override
-    public Set<String> allAnagrams() {
-        return Collections.unmodifiableSet(anagrams);
+    public Set<Anagram> allAnagrams() {
+        return unmodifiableSet(anagrams);
     }
 
     @Override
-    public Optional<String> anyAnagram() {
-        return allAnagrams().stream().findAny();
+    public Optional<Anagram> findAnagram(@NonNull String text) {
+        Objects.requireNonNull(text);
+
+        return anagrams.stream()
+                .filter(a -> a.isAnagram(text))
+                .findAny();
     }
 
     @Override
-    public void add(@NonNull String anagram) {
+    public Anagram add(@NonNull Anagram anagram) {
         Objects.requireNonNull(anagram);
+
         anagrams.add(anagram);
+        return anagram;
     }
 
 }

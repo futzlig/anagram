@@ -3,13 +3,11 @@ package de.labusch.anagram.ui;
 import de.labusch.anagram.domain.AnagramService;
 
 import java.io.Console;
-import java.util.Set;
-
-import static java.util.stream.Collectors.joining;
+import java.util.Optional;
 
 /**
- * @since 20.03.2026.
  * @author Fin Labusch
+ * @since 20.03.2026.
  */
 public class UIController {
 
@@ -49,7 +47,7 @@ public class UIController {
     }
 
     private Choice mainMenu() {
-        console.printf("Main Menu: 1 = Enter anagrams  2 = Test anagram  Q: Quit\n");
+        console.printf("\nMain Menu: 1 = Enter anagrams  2 = Test anagram  Q: Quit\n");
         console.printf("Your choice: ");
         String choice = console.readLine();
         return switch (choice) {
@@ -61,36 +59,44 @@ public class UIController {
     }
 
     public void enterAnagram() {
-        console.printf("Enter anagrams. Press Return to leave.\n");
-        while (true) {
-            console.printf("Enter word or phrase: ");
-            String text = console.readLine();
-            if (text.isBlank()) {
-                break;
-            }
-
-            Set<String> anagrams = service.addAnagram(text);
-            console.printf(
-                    anagrams.stream()
-                            .collect(joining(", ", "Anagrams: [", "]\n"))
-            );
-        }
+        prompt("Enter word or phrase: ")
+                .ifPresent(text1 ->
+                        prompt("Enter second word or phrase: ")
+                                .ifPresent(text2 -> {
+                                    boolean test = service.areAnagrams(text1, text2);
+                                    if (test) {
+                                        service.addAnagrams(text1, text2);
+                                        console.printf("'%s' is an anagram of '%s'.\n", text1, text2);
+                                    } else {
+                                        console.printf("'%s' and '%s' are not anagrams.\n", text1, text2);
+                                    }
+                                })
+                );
     }
+
 
     public void testAnagram() {
-        console.printf("Test anagrams. Press Return to leave.\n");
-        while (true) {
-            console.printf("Enter word or phrase: ");
-            String text = console.readLine();
-            if (text.isBlank()) {
-                break;
-            }
-
-            Set<String> anagrams = service.findAnagrams(text);
-            console.printf(
-                    anagrams.stream()
-                            .collect(joining(", ", "Found anagrams: [", "]\n"))
-            );
-        }
+        console.printf("Find anagrams.\n");
+        prompt("Enter word or phrase: ")
+                .ifPresent(text ->
+                        service.findAnagrams(text)
+                                .ifPresentOrElse(
+                                        a -> console.printf("%s\n", a),
+                                        () -> console.printf("[]\n")
+                                )
+                );
     }
+
+    private Optional<String> prompt(String message) {
+        console.printf(message);
+        String text = console.readLine().trim();
+        if (text.isBlank()) {
+            console.printf("No text entered.");
+            return Optional.empty();
+        }
+
+        return Optional.of(text);
+    }
+
 }
+

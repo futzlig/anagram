@@ -8,12 +8,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -22,8 +23,8 @@ import static org.mockito.Mockito.when;
 /**
  * Unit-Test zur Klasse @{link AnagramServiceTest}.
  *
- * @since 20.03.2026.
  * @author Fin Labusch
+ * @since 20.03.2026.
  */
 @ExtendWith(MockitoExtension.class)
 class AnagramServiceTest {
@@ -35,42 +36,33 @@ class AnagramServiceTest {
     private AnagramRepository repository;
 
     @Nested
-    class AddAnagramTests {
+    class AddAnagramsTests {
+
         @Test
         void shouldAddFirstAnagramToRepository() {
-            Set<String> anagrams = Set.of("foo");
+            when(repository.add(any(Anagram.class)))
+                    .then(args -> args.getArgument(0));
 
-            when(repository.allAnagrams())
-                    .thenReturn(anagrams);
+            Anagram anagram = service.addAnagrams("post", "stop");
 
-            Set<String> newAnagrams = service.addAnagram("foo");
-
-            assertThat(newAnagrams, equalTo(anagrams));
-            verify(repository).add("foo");
-            verify(repository).allAnagrams();
+            assertThat(anagram, is(notNullValue()));
+            assertThat(anagram.getAnagrams(), containsInAnyOrder("post", "stop"));
+            verify(repository).add(any(Anagram.class));
         }
 
         @Test
         void shouldAddAnagramToRepository() {
-            when(repository.anyAnagram())
-                    .thenReturn(Optional.of("post"));
+            Anagram existingAnagram = Anagram.valueOf("post");
+            when(repository.findAnagram("post"))
+                    .thenReturn(Optional.of(existingAnagram));
 
-            service.addAnagram("stop");
+            Anagram anagram = service.addAnagrams("post", "stop");
 
-            verify(repository).add("stop");
-            verify(repository).allAnagrams();
-        }
-
-        @Test
-        void shouldNotAddNonAnagramToRepository() {
-            when(repository.anyAnagram())
-                    .thenReturn(Optional.of("post"));
-
-            service.addAnagram("pain");
-
+            assertThat(anagram, equalTo(existingAnagram));
+            assertThat(anagram.getAnagrams(), containsInAnyOrder("post", "stop"));
             verify(repository, never()).add(any());
-            verify(repository).allAnagrams();
         }
+
     }
 
 
@@ -79,26 +71,21 @@ class AnagramServiceTest {
 
         @Test
         void shouldFindAnagrams() {
-            Set<String> anagrams = Set.of("stop", "post", "pots");
-            when(repository.allAnagrams())
-                    .thenReturn(anagrams);
+            Anagram existingAnagram = Anagram.valueOf("post");
+            when(repository.findAnagram("post"))
+                    .thenReturn(Optional.of(existingAnagram));
 
-            Set<String> foundAnagrams = service.findAnagrams("spot");
+            Optional<Anagram> foundAnagram = service.findAnagrams("post");
 
-            assertThat(foundAnagrams, equalTo(anagrams));
-            verify(repository).allAnagrams();
+            assertTrue(foundAnagram.isPresent());
+            assertThat(foundAnagram.get(), equalTo(existingAnagram));
         }
 
         @Test
-        void shouldNotFindAnyAnagramsIfTestFails() {
-            Set<String> anagrams = Set.of("stop", "post", "pots");
-            when(repository.allAnagrams())
-                    .thenReturn(anagrams);
+        void shouldNotFindAnyNonExistingAnagrams() {
+            Optional<Anagram> foundAnagram = service.findAnagrams("pain");
 
-            Set<String> foundAnagrams = service.findAnagrams("pain");
-
-            assertThat(foundAnagrams, is(empty()));
-            verify(repository).allAnagrams();
+            assertTrue(foundAnagram.isEmpty());
         }
 
     }

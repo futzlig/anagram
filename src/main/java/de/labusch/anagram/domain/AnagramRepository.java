@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Stores all variants of a single anagram.
+ * Repository for anagrams.
  *
  * @since 19.03.2026.
  * @author Fin Labusch
@@ -14,18 +14,18 @@ import java.util.Set;
 public interface AnagramRepository {
 
     /**
-     * Returns all anagrams in this repository.
+     * Return all anagrams in this repository.
      */
-    Set<String> allAnagrams();
+    Set<Anagram> allAnagrams();
 
     /**
      * Returns any anagram - if one exists.
      */
-    Optional<String> anyAnagram();
+    Optional<Anagram> findAnagram(@NonNull String text);
 
     /**
      * Adds an anagram to this repository.
      */
-    void add(@NonNull String anagram);
+    Anagram add(@NonNull Anagram anagram);
 
 }
