@@ -1,4 +1,7 @@
-package de.labusch.anagram.domain;
+package de.labusch.anagram.application;
+
+import de.labusch.anagram.domain.Anagram;
+import de.labusch.anagram.domain.AnagramRepository;
 
 import org.jspecify.annotations.NonNull;
 

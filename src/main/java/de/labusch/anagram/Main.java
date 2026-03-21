@@ -1,7 +1,7 @@
 package de.labusch.anagram;
 
 import de.labusch.anagram.domain.AnagramRepository;
-import de.labusch.anagram.domain.AnagramService;
+import de.labusch.anagram.application.AnagramService;
 import de.labusch.anagram.infrastructure.persistence.InMemoryAnagramRepository;
 import de.labusch.anagram.ui.UIController;
 

@@ -1,6 +1,6 @@
 package de.labusch.anagram.ui;
 
-import de.labusch.anagram.domain.AnagramService;
+import de.labusch.anagram.application.AnagramService;
 
 import java.io.Console;
 import java.util.Optional;
